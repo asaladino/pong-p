@@ -1,11 +1,12 @@
 import pygame
-import paddle
+from pygame.locals import K_q, K_a
+
+import board
 import ball
+import score
+import paddle
 import user_controller
 import logical_controller
-import board
-import score
-from pygame.locals import K_q, K_a, K_p, K_l
 
 pygame.init()
 pygame.display.set_caption('Pong')

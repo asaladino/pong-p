@@ -13,10 +13,17 @@ pip3 install pygame --user
 python3 pong.py
 ```
 
+Use the `spacebar` to start / re-start a game and use `r` to reset the score board.
+
+For continuous play hit `c`.
+
 ## Game Configuration
 ```python
-import board, score, ball, paddle
-import user_controller, logical_controller
+import board
+import score
+import ball
+import paddle
+import user_controller
 from pygame.locals import K_q, K_a, K_p, K_l
 
 # Create a board, score and ball
@@ -34,11 +41,14 @@ paddle2 = paddle.Paddle(board, left=False)
 # Set player 1 as user controlled
 userPlayer1Controller = user_controller.UserController(paddle1, up=K_q, down=K_a)
 # Set player 1 to use the logical controller.
-userPlayer1Controller = logical_controller.LogicalController(paddle1)
+# userPlayer1Controller = logical_controller.LogicalController(paddle1)
 
 # Set player 2 as user controlled
 userPlayer2Controller = user_controller.UserController(paddle1, up=K_p, down=K_l)
 # Set player 2 to use the logical controller.
-userPlayer2Controller = logical_controller.LogicalController(paddle2)
+# userPlayer2Controller = logical_controller.LogicalController(paddle2)
 
+# Check if the controllers moved the paddles.
+userPlayer1Controller.did_paddle_move(None, ball)
+userPlayer2Controller.did_paddle_move(None, ball)
 ```

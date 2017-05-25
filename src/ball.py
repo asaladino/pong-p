@@ -3,12 +3,15 @@ from random import randint
 
 
 class Ball:
-    def __init__(self, board, restart_key=pygame.K_SPACE):
+    def __init__(self, board, restart_key=pygame.K_SPACE, auto_play_key=pygame.K_c):
         self.rect = pygame.Rect(20, randint(20, board.size[1] - 20), 20, 20)
         self.color = (0, 128, 255)
+        self.colorAutoPlay = (255, 0, 0)
         self.speed = [0, 0]
         self.board = board
         self.restartKey = restart_key
+        self.autoPlayKey = auto_play_key
+        self.autoPlay = False
 
     def initialize(self):
         self.start_position()
@@ -18,6 +21,8 @@ class Ball:
     def start_position(self):
         self.rect = pygame.Rect(20, randint(20, self.board.size[1] - 20), 20, 20)
         self.speed = [0, 0]
+        if self.autoPlay:
+            self.speed = [2, 2]
 
     def update(self):
         self.rect = self.rect.move(self.speed)
@@ -27,7 +32,7 @@ class Ball:
     def render(self):
         self.update()
         screen = self.board.screen
-        pygame.draw.circle(screen, self.color, (int(self.rect.centerx), int(self.rect.centery)),
+        pygame.draw.circle(screen, self.ball_color(), (int(self.rect.centerx), int(self.rect.centery)),
                            int(self.rect.width / 2), 0)
 
     def did_hit(self, paddle):
@@ -37,3 +42,8 @@ class Ball:
     def did_restart(self, event):
         if event.type == pygame.KEYDOWN and event.key == self.restartKey:
             self.initialize()
+        if event.type == pygame.KEYDOWN and event.key == self.autoPlayKey:
+            self.autoPlay = not self.autoPlay
+
+    def ball_color(self):
+        return self.colorAutoPlay if self.autoPlay else self.color

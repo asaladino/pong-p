@@ -7,6 +7,7 @@ class UserController(object):
         self.up = up
         self.down = down
 
+    # noinspection PyUnusedLocal
     def did_paddle_move(self, event, ball):
         if event is None:
             return
