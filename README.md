@@ -14,7 +14,7 @@ python3 pong.py
 ## Controller Setup
 You can setup a different player for each controller.
 
-```pythonstub
+```python
 # Set player 1 as user controlled
 userPlayer1Controller = user_controller.UserController(paddle1, up=K_q, down=K_a)
 # Set player 1 to use the logical controller.
