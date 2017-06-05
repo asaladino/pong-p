@@ -1,12 +1,11 @@
 import pygame
 from pygame.locals import K_q, K_a
 
-import board
 import ball
-import score
+import board
 import paddle
-import user_controller
-import logical_controller
+import score
+from controllers import user_controller, logical_controller, neural_network_controller
 
 pygame.init()
 pygame.display.set_caption('Pong')
@@ -17,6 +16,7 @@ ball = ball.Ball(board)
 paddle1 = paddle.Paddle(board)
 paddle2 = paddle.Paddle(board, left=False)
 
+# userPlayer1Controller = neural_network_controller.NeuralNetworkController(paddle1)
 userPlayer1Controller = user_controller.UserController(paddle1, up=K_q, down=K_a)
 # userPlayer1Controller = logical_controller.LogicalController(paddle1)
 
@@ -31,19 +31,24 @@ while True:
         userPlayer1Controller.did_paddle_move(event, ball)
         userPlayer2Controller.did_paddle_move(event, ball)
 
-    userPlayer1Controller.did_paddle_move(None, ball)
-    userPlayer2Controller.did_paddle_move(None, ball)
+    userPlayer1Controller.did_paddle_move_alone(ball)
+    userPlayer2Controller.did_paddle_move_alone(ball)
 
     ball.did_hit(paddle1)
     ball.did_hit(paddle2)
 
-    score.player2 += paddle1.did_miss(ball)
     score.player1 += paddle2.did_miss(ball)
+    score.player2 += paddle1.did_miss(ball)
 
     board.render()
+    score.render()
     ball.render()
     paddle1.render()
     paddle2.render()
-    score.render()
 
     pygame.display.flip()
+
+    image_data = pygame.surfarray.array3d(pygame.display.get_surface())
+
+    userPlayer1Controller.learn(image_data, score)
+    userPlayer2Controller.learn(image_data, score)

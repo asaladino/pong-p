@@ -19,5 +19,4 @@ class Score(object):
 
     def did_reset(self, event):
         if event.type == pygame.KEYDOWN and event.key == self.resetKey:
-            self.player1 = 0
-            self.player2 = 0
+            self.player1 = self.player2 = 0

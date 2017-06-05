@@ -7,11 +7,11 @@ class UserController(object):
         self.up = up
         self.down = down
 
+    def did_paddle_move_alone(self, ball):
+        pass
+
     # noinspection PyUnusedLocal
     def did_paddle_move(self, event, ball):
-        if event is None:
-            return
-
         if event.type == KEYDOWN:
             if event.key == self.up:
                 self.paddle.direction = -1
@@ -22,3 +22,6 @@ class UserController(object):
             if event.key == self.up and self.paddle.direction == -1 or \
                                     event.key == self.down and self.paddle.direction == 1:
                 self.paddle.direction = 0
+
+    def learn(self, data, score):
+        pass
