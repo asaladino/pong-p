@@ -1,5 +1,7 @@
 # PongP
-Pong for python using pygame and hopefully tensorflow.
+Pong for python using pygame and hopefully tensorflow. This game is
+based on [Siraj's pong neural network](https://github.com/llSourcell/pong_neural_network_live)
+and [video](https://youtu.be/Hqf__FlRlzg).
 
 ![alt text](notes/pong.png "PongP")
 
