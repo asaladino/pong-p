@@ -25,7 +25,7 @@ import board
 import score
 import ball
 import paddle
-import user_controller
+import controllers.user_controller as user_controller
 from pygame.locals import K_q, K_a, K_p, K_l
 
 # Create a board, score and ball

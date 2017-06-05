@@ -5,7 +5,7 @@ import ball
 import board
 import paddle
 import score
-from controllers import user_controller, logical_controller, neural_network_controller
+from controllers import user_controller, logical_controller  # , neural_network_controller
 
 pygame.init()
 pygame.display.set_caption('Pong')
