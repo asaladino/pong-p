@@ -8,6 +8,7 @@ and [video](https://youtu.be/Hqf__FlRlzg).
 ## Install pygame
 ```commandline
 pip3 install pygame --user
+pip3 install pyqt5 --user
 ```
 
 ## Run pong

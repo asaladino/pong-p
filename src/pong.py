@@ -1,11 +1,11 @@
 import pygame
 from pygame.locals import K_q, K_a
 
-import ball
-import board
-import paddle
-import score
+from models import score, ball, board, paddle
 from controllers import user_controller, logical_controller  # , neural_network_controller
+from ui import settings_dialog
+
+settingsDialog = settings_dialog.SettingsDialog()
 
 pygame.init()
 pygame.display.set_caption('Pong')
@@ -30,6 +30,7 @@ while True:
         ball.did_restart(event)
         userPlayer1Controller.did_paddle_move(event, ball)
         userPlayer2Controller.did_paddle_move(event, ball)
+        settingsDialog.should_display(event)
 
     userPlayer1Controller.did_paddle_move_alone(ball)
     userPlayer2Controller.did_paddle_move_alone(ball)
