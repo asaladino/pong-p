@@ -40,9 +40,9 @@ class Paddle(object):
 
     def did_miss(self, ball):
         if self.left and ball.rect.left < 0:
-            # ball.start_position()
+            ball.start_position()
             return 1
         elif not self.left and ball.rect.right > self.board.size[0]:
-            # ball.start_position()
+            ball.start_position()
             return 1
         return 0
