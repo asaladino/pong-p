@@ -6,6 +6,8 @@ import pygame
 
 
 # http://zetcode.com/gui/pyqt5/firstprograms/
+from models.setting import ControllerTypes
+
 
 class SettingsDialog:
     def __init__(self):
@@ -36,14 +38,12 @@ class SettingsDialog:
         board_width_edit = QLineEdit()
 
         controllers_player1_combo = QComboBox()
-        controllers_player1_combo.addItem("User")
-        controllers_player1_combo.addItem("Logical AI")
-        controllers_player1_combo.addItem("Learning AI")
-
         controllers_player2_combo = QComboBox()
-        controllers_player2_combo.addItem("User")
-        controllers_player2_combo.addItem("Logical AI")
-        controllers_player2_combo.addItem("Learning AI")
+
+        for controller in ControllerTypes:
+            print(controller.value)
+            controllers_player1_combo.addItem(controller.value)
+            controllers_player2_combo.addItem(controller.value)
 
         ok_button = QPushButton("OK")
         cancel_button = QPushButton("Cancel")

@@ -1,27 +1,22 @@
 import pygame
-from pygame.locals import K_q, K_a
 
-from models import score, ball, board, paddle
-from controllers import user_controller, logical_controller  # , neural_network_controller
+from models import score, ball, board, paddle, setting
 from ui import settings_dialog
 
+setting = setting.Setting()
 settingsDialog = settings_dialog.SettingsDialog()
 
 pygame.init()
 pygame.display.set_caption('Pong')
 
-board = board.Board((640, 480))
+board = board.Board((setting.boardWidth, setting.boardHeight))
 score = score.Score(board)
 ball = ball.Ball(board)
 paddle1 = paddle.Paddle(board)
 paddle2 = paddle.Paddle(board, left=False)
 
-# userPlayer1Controller = neural_network_controller.NeuralNetworkController(paddle1)
-userPlayer1Controller = user_controller.UserController(paddle1, up=K_q, down=K_a)
-# userPlayer1Controller = logical_controller.LogicalController(paddle1)
-
-# userPlayer2Controller = user_controller.UserController(paddle1, up=K_p, down=K_l)
-userPlayer2Controller = logical_controller.LogicalController(paddle2)
+userPlayer1Controller = setting.get_controller1(paddle1)
+userPlayer2Controller = setting.get_controller2(paddle2)
 
 while True:
     for event in pygame.event.get():
