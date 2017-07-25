@@ -41,7 +41,6 @@ class SettingsDialog:
         controllers_player2_combo = QComboBox()
 
         for controller in ControllerTypes:
-            print(controller.value)
             controllers_player1_combo.addItem(controller.value)
             controllers_player2_combo.addItem(controller.value)
 

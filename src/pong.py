@@ -1,19 +1,25 @@
 import pygame
 
-from models import score, ball, board, paddle, setting
-from ui import settings_dialog
+from models.board import Board
+from models.score import Score
+from models.paddle import Paddle
+from models.ball import Ball
+from repositories.settings_repository import SettingsRepository
+from ui.settings_dialog import SettingsDialog
 
-setting = setting.Setting()
-settingsDialog = settings_dialog.SettingsDialog()
+settingsRepository = SettingsRepository('settings.bin')
+
+setting = settingsRepository.read()
+settingsDialog = SettingsDialog()
 
 pygame.init()
 pygame.display.set_caption('Pong')
 
-board = board.Board((setting.boardWidth, setting.boardHeight))
-score = score.Score(board)
-ball = ball.Ball(board)
-paddle1 = paddle.Paddle(board)
-paddle2 = paddle.Paddle(board, left=False)
+board = Board((setting.boardWidth, setting.boardHeight))
+score = Score(board)
+ball = Ball(board)
+paddle1 = Paddle(board)
+paddle2 = Paddle(board, left=False)
 
 userPlayer1Controller = setting.get_controller1(paddle1)
 userPlayer2Controller = setting.get_controller2(paddle2)
