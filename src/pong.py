@@ -13,7 +13,7 @@ class Pong:
     def __init__(self):
         self.settingsRepository = SettingsRepository('settings.bin')
         self.setting = self.settingsRepository.read()
-        self.settingsDialog = SettingsDialog(self.setting)
+        self.settingsDialog = SettingsDialog(self.setting, self)
 
         pygame.init()
         pygame.display.set_caption('Pong')
@@ -28,6 +28,19 @@ class Pong:
         self.userPlayer2Controller = self.setting.get_controller2(self.paddle2)
 
         self.gameOn = False
+
+    def save_setting(self, setting):
+        self.setting = setting
+        self.settingsRepository.write(self.setting)
+
+        self.board = Board((self.setting.boardWidth, self.setting.boardHeight))
+        self.score = Score(self.board)
+        self.ball = Ball(self.board)
+        self.paddle1 = Paddle(self.board)
+        self.paddle2 = Paddle(self.board, left=False)
+
+        self.userPlayer1Controller = self.setting.get_controller1(self.paddle1)
+        self.userPlayer2Controller = self.setting.get_controller2(self.paddle2)
 
     def game_on(self):
         self.gameOn = True

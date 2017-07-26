@@ -9,16 +9,21 @@ from models.setting import ControllerTypes
 
 
 class SettingsDialog:
-    def __init__(self, setting):
+    def __init__(self, setting, pong):
         self.app = QApplication(sys.argv)
+        # noinspection PyArgumentList
         self.window = QWidget()
         self.window.resize(250, 150)
         self.window.setWindowTitle('Settings')
         self.setting = setting
+        self.pong = pong
 
         tabs = QTabWidget()
+        # noinspection PyArgumentList
         options_tab = QWidget()
+        # noinspection PyArgumentList
         controller1_tab = QWidget()
+        # noinspection PyArgumentList
         controller2_tab = QWidget()
         tabs.resize(300, 200)
 
@@ -43,18 +48,24 @@ class SettingsDialog:
             self.controllers_player2_combo.addItem(controller.value)
 
         ok_button = QPushButton("Save")
+        # noinspection PyUnresolvedReferences
         ok_button.clicked.connect(self.save)
         cancel_button = QPushButton("Cancel")
+        # noinspection PyUnresolvedReferences
         cancel_button.clicked.connect(self.window.hide)
 
         # Options
         options_grid = QGridLayout()
         options_grid.setSpacing(10)
 
+        # noinspection PyArgumentList
         options_grid.addWidget(board_height_label, 1, 0)
+        # noinspection PyArgumentList
         options_grid.addWidget(self.board_height_edit, 1, 1)
 
+        # noinspection PyArgumentList
         options_grid.addWidget(board_width_label, 2, 0)
+        # noinspection PyArgumentList
         options_grid.addWidget(self.board_width_edit, 2, 1)
 
         options_v_box = QVBoxLayout()
@@ -66,7 +77,9 @@ class SettingsDialog:
         controller1_grid = QGridLayout()
         controller1_grid.setSpacing(10)
 
+        # noinspection PyArgumentList
         controller1_grid.addWidget(controllers_player1_label, 1, 0)
+        # noinspection PyArgumentList
         controller1_grid.addWidget(self.controllers_player1_combo, 1, 1)
 
         controller1_v_box = QVBoxLayout()
@@ -78,7 +91,9 @@ class SettingsDialog:
         controller2_grid = QGridLayout()
         controller2_grid.setSpacing(10)
 
+        # noinspection PyArgumentList
         controller2_grid.addWidget(controllers_player2_label, 1, 0)
+        # noinspection PyArgumentList
         controller2_grid.addWidget(self.controllers_player2_combo, 1, 1)
 
         controller2_v_box = QVBoxLayout()
@@ -88,12 +103,15 @@ class SettingsDialog:
 
         h_box = QHBoxLayout()
         h_box.addStretch(1)
+        # noinspection PyArgumentList
         h_box.addWidget(cancel_button)
+        # noinspection PyArgumentList
         h_box.addWidget(ok_button)
 
         v_box = QVBoxLayout()
         v_box.addStretch(1)
 
+        # noinspection PyArgumentList
         v_box.addWidget(tabs)
         v_box.addLayout(h_box)
 
@@ -129,4 +147,5 @@ class SettingsDialog:
         if self.controllers_player2_combo.currentText() is ControllerTypes.LOGICAL_AI:
             self.setting.controller2 = ControllerTypes.LOGICAL_AI
 
+        self.pong.save_setting(self.setting)
         self.window.hide()
