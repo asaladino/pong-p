@@ -34,14 +34,27 @@ class SettingsDialog:
 
         board_height_label = QLabel('Board Height')
         board_width_label = QLabel('Board Width')
-        controllers_player1_label = QLabel("Controllers")
-        controllers_player2_label = QLabel("Controllers")
+
+        controllers_player1_label = QLabel("Controller")
+        controllers_player2_label = QLabel("Controller")
+
+        controllers_player1_up_label = QLabel("Key Up")
+        controllers_player1_down_label = QLabel("Key Down")
+
+        controllers_player2_up_label = QLabel("Key Up")
+        controllers_player2_down_label = QLabel("Key Down")
 
         self.board_height_edit = QLineEdit()
         self.board_width_edit = QLineEdit()
 
         self.controllers_player1_combo = QComboBox()
         self.controllers_player2_combo = QComboBox()
+
+        self.controllers_player1_up_edit = QLineEdit()
+        self.controllers_player1_down_edit = QLineEdit()
+
+        self.controllers_player2_up_edit = QLineEdit()
+        self.controllers_player2_down_edit = QLineEdit()
 
         for controller in ControllerTypes:
             self.controllers_player1_combo.addItem(controller.value)
@@ -81,6 +94,14 @@ class SettingsDialog:
         controller1_grid.addWidget(controllers_player1_label, 1, 0)
         # noinspection PyArgumentList
         controller1_grid.addWidget(self.controllers_player1_combo, 1, 1)
+        # noinspection PyArgumentList
+        controller1_grid.addWidget(controllers_player1_up_label, 2, 0)
+        # noinspection PyArgumentList
+        controller1_grid.addWidget(self.controllers_player1_up_edit, 2, 1)
+        # noinspection PyArgumentList
+        controller1_grid.addWidget(controllers_player1_down_label, 3, 0)
+        # noinspection PyArgumentList
+        controller1_grid.addWidget(self.controllers_player1_down_edit, 3, 1)
 
         controller1_v_box = QVBoxLayout()
         controller1_v_box.addStretch(1)
@@ -95,6 +116,14 @@ class SettingsDialog:
         controller2_grid.addWidget(controllers_player2_label, 1, 0)
         # noinspection PyArgumentList
         controller2_grid.addWidget(self.controllers_player2_combo, 1, 1)
+        # noinspection PyArgumentList
+        controller2_grid.addWidget(controllers_player2_up_label, 2, 0)
+        # noinspection PyArgumentList
+        controller2_grid.addWidget(self.controllers_player2_up_edit, 2, 1)
+        # noinspection PyArgumentList
+        controller2_grid.addWidget(controllers_player2_down_label, 3, 0)
+        # noinspection PyArgumentList
+        controller2_grid.addWidget(self.controllers_player2_down_edit, 3, 1)
 
         controller2_v_box = QVBoxLayout()
         controller2_v_box.addStretch(1)
@@ -126,26 +155,39 @@ class SettingsDialog:
     def update_setting(self):
         self.board_height_edit.setText(str(self.setting.boardHeight))
         self.board_width_edit.setText(str(self.setting.boardWidth))
+
         self.controllers_player1_combo.setCurrentText(self.setting.controller1.value)
         self.controllers_player2_combo.setCurrentText(self.setting.controller2.value)
+
+        self.controllers_player1_up_edit.setText(str(self.setting.controller1Up))
+        self.controllers_player1_down_edit.setText(str(self.setting.controller1Down))
+
+        self.controllers_player2_up_edit.setText(str(self.setting.controller2Up))
+        self.controllers_player2_down_edit.setText(str(self.setting.controller2Down))
 
     def save(self):
         self.setting.boardHeight = int(self.board_height_edit.text())
         self.setting.boardWidth = int(self.board_width_edit.text())
 
-        if self.controllers_player1_combo.currentText() is ControllerTypes.USER:
+        if self.controllers_player1_combo.currentText() == ControllerTypes.USER.value:
             self.setting.controller1 = ControllerTypes.USER
-        if self.controllers_player1_combo.currentText() is ControllerTypes.LEARNING_AI:
+        if self.controllers_player1_combo.currentText() == ControllerTypes.LEARNING_AI.value:
             self.setting.controller1 = ControllerTypes.LEARNING_AI
-        if self.controllers_player1_combo.currentText() is ControllerTypes.LOGICAL_AI:
+        if self.controllers_player1_combo.currentText() == ControllerTypes.LOGICAL_AI.value:
             self.setting.controller1 = ControllerTypes.LOGICAL_AI
 
-        if self.controllers_player2_combo.currentText() is ControllerTypes.USER:
+        if self.controllers_player2_combo.currentText() == ControllerTypes.USER.value:
             self.setting.controller2 = ControllerTypes.USER
-        if self.controllers_player2_combo.currentText() is ControllerTypes.LEARNING_AI:
+        if self.controllers_player2_combo.currentText() == ControllerTypes.LEARNING_AI.value:
             self.setting.controller2 = ControllerTypes.LEARNING_AI
-        if self.controllers_player2_combo.currentText() is ControllerTypes.LOGICAL_AI:
+        if self.controllers_player2_combo.currentText() == ControllerTypes.LOGICAL_AI.value:
             self.setting.controller2 = ControllerTypes.LOGICAL_AI
+
+        self.setting.controller1Up = int(self.controllers_player1_up_edit.text())
+        self.setting.controller1Down = int(self.controllers_player1_down_edit.text())
+
+        self.setting.controller2Up = int(self.controllers_player2_up_edit.text())
+        self.setting.controller2Down = int(self.controllers_player2_down_edit.text())
 
         self.pong.save_setting(self.setting)
         self.window.hide()
