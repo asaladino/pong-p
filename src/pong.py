@@ -1,49 +1,89 @@
 import pygame
-from pygame.locals import K_q, K_a
 
-import board
-import ball
-import score
-import paddle
-import user_controller
-import logical_controller
+from models.board import Board
+from models.score import Score
+from models.paddle import Paddle
+from models.ball import Ball
+from repositories.settings_repository import SettingsRepository
+from ui.settings_dialog import SettingsDialog
 
-pygame.init()
-pygame.display.set_caption('Pong')
 
-board = board.Board((640, 480))
-score = score.Score(board)
-ball = ball.Ball(board)
-paddle1 = paddle.Paddle(board)
-paddle2 = paddle.Paddle(board, left=False)
+class Pong:
 
-userPlayer1Controller = user_controller.UserController(paddle1, up=K_q, down=K_a)
-# userPlayer1Controller = logical_controller.LogicalController(paddle1)
+    def __init__(self):
+        self.settingsRepository = SettingsRepository('settings.bin')
+        self.setting = self.settingsRepository.read()
+        self.settingsDialog = SettingsDialog(self.setting, self)
 
-# userPlayer2Controller = user_controller.UserController(paddle1, up=K_p, down=K_l)
-userPlayer2Controller = logical_controller.LogicalController(paddle2)
+        pygame.init()
+        pygame.display.set_caption('Pong')
 
-while True:
-    for event in pygame.event.get():
-        score.did_reset(event)
-        board.game_did_end(event)
-        ball.did_restart(event)
-        userPlayer1Controller.did_paddle_move(event, ball)
-        userPlayer2Controller.did_paddle_move(event, ball)
+        self.board = Board((self.setting.boardWidth, self.setting.boardHeight))
+        self.score = Score(self.board)
+        self.ball = Ball(self.board)
+        self.paddle1 = Paddle(self.board)
+        self.paddle2 = Paddle(self.board, left=False)
 
-    userPlayer1Controller.did_paddle_move(None, ball)
-    userPlayer2Controller.did_paddle_move(None, ball)
+        self.userPlayer1Controller = self.setting.get_controller1(self.paddle1)
+        self.userPlayer2Controller = self.setting.get_controller2(self.paddle2)
 
-    ball.did_hit(paddle1)
-    ball.did_hit(paddle2)
+        self.gameOn = False
 
-    score.player2 += paddle1.did_miss(ball)
-    score.player1 += paddle2.did_miss(ball)
+    def save_setting(self, setting):
+        self.setting = setting
+        self.settingsRepository.write(self.setting)
 
-    board.render()
-    ball.render()
-    paddle1.render()
-    paddle2.render()
-    score.render()
+        self.board = Board((self.setting.boardWidth, self.setting.boardHeight))
+        self.score = Score(self.board)
+        self.ball = Ball(self.board)
+        self.paddle1 = Paddle(self.board)
+        self.paddle2 = Paddle(self.board, left=False)
 
-    pygame.display.flip()
+        self.userPlayer1Controller = self.setting.get_controller1(self.paddle1)
+        self.userPlayer2Controller = self.setting.get_controller2(self.paddle2)
+
+    def game_on(self):
+        self.gameOn = True
+        self.game_loop()
+
+    def game_off(self):
+        self.gameOn = False
+
+    def game_loop(self):
+        while self.gameOn:
+            self.event_check()
+
+            self.userPlayer1Controller.did_paddle_move_alone(self.ball)
+            self.userPlayer2Controller.did_paddle_move_alone(self.ball)
+
+            self.ball.did_hit(self.paddle1)
+            self.ball.did_hit(self.paddle2)
+
+            self.score.player1 += self.paddle2.did_miss(self.ball)
+            self.score.player2 += self.paddle1.did_miss(self.ball)
+
+            self.board.render()
+            self.score.render()
+            self.ball.render()
+            self.paddle1.render()
+            self.paddle2.render()
+
+            pygame.display.flip()
+
+            image_data = pygame.surfarray.array3d(pygame.display.get_surface())
+
+            self.userPlayer1Controller.learn(image_data, self.score)
+            self.userPlayer2Controller.learn(image_data, self.score)
+
+    def event_check(self):
+        for event in pygame.event.get():
+            self.score.did_reset(event)
+            self.board.game_did_end(event)
+            self.ball.did_restart(event)
+            self.userPlayer1Controller.did_paddle_move(event, self.ball)
+            self.userPlayer2Controller.did_paddle_move(event, self.ball)
+            self.settingsDialog.should_display(event, self.setting)
+
+
+pong = Pong()
+pong.game_on()

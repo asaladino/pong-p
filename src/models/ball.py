@@ -22,12 +22,15 @@ class Ball:
         self.rect = pygame.Rect(20, randint(20, self.board.size[1] - 20), 20, 20)
         self.speed = [0, 0]
         if self.autoPlay:
+            self.color = (0, 128, 255)
             self.speed = [2, 2]
 
     def update(self):
         self.rect = self.rect.move(self.speed)
         if self.rect.top < 0 or self.rect.bottom > self.board.size[1]:
             self.speed[1] = -self.speed[1]
+        if self.autoPlay and (self.rect.left < 0 or self.rect.right > self.board.size[0]):
+            self.speed[0] = -self.speed[0]
 
     def render(self):
         self.update()
