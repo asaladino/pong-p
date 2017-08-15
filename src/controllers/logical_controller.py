@@ -9,8 +9,11 @@ class LogicalController(object):
     def did_paddle_move_alone(self, ball):
         if self.paddle.rect.center[1] < ball.rect.center[1]:
             self.paddle.direction = 1
-        else:
+        elif self.paddle.rect.center[1] > ball.rect.center[1]:
             self.paddle.direction = -1
 
     def learn(self, data, score):
+        pass
+
+    def resign(self):
         pass

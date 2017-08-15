@@ -41,6 +41,8 @@ class Ball:
     def did_hit(self, paddle):
         if self.rect.colliderect(paddle.rect):
             self.speed[0] = -self.speed[0]
+            return 1
+        return 0
 
     def did_restart(self, event):
         if event.type == pygame.KEYDOWN and event.key == self.restartKey:

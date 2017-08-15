@@ -25,3 +25,6 @@ class UserController(object):
 
     def learn(self, data, score):
         pass
+
+    def resign(self):
+        pass

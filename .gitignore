@@ -1,5 +1,5 @@
 .idea/
-settings.bin
+state/settings.bin
 
 # Byte-compiled / optimized / DLL files
 # __pycache__/
@@ -102,3 +102,4 @@ settings.bin
 
 # mypy
 # .mypy_cache/
+state/logs
