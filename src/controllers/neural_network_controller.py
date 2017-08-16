@@ -43,13 +43,14 @@ class NeuralNetworkController(object):
         self.inp_t = None
         # saver
         self.saver = None
-        self.stats_log = open("logs/stats.log", "w")
+        self.stats_log = open("../state/logs/stats.log", "w")
 
         # total game score
         self.score = 0
 
         self.t = 0
         self.epsilon = self.INITIAL_EPSILON
+        self.create_graph()
 
     def create_graph(self):
         """
@@ -95,10 +96,10 @@ class NeuralNetworkController(object):
         pass
 
     def did_paddle_move_alone(self, ball):
-        if self.argmax_t is not None:
-            if self.argmax_t[2] == 1:
+        if self.arg_max_t is not None:
+            if self.arg_max_t[2] == 1:
                 self.paddle.direction = 1
-            elif self.argmax_t[1] == 1:
+            elif self.arg_max_t[1] == 1:
                 self.paddle.direction = -1
 
     def train_graph(self, frame):
@@ -139,9 +140,12 @@ class NeuralNetworkController(object):
 
     def learn(self, frame, reward_t):
         """
-        :param image_data:
+        :param frame:
         :param reward_t: reward tensor if score is positive
         """
+        if self.inp_t is None:
+            self.train_graph(frame)
+
         # output tensor
         out_t = self.output.eval(feed_dict={self.input: [self.inp_t]})[0]
         # arg_max function
@@ -226,7 +230,7 @@ class NeuralNetworkController(object):
 
         # save our session every 10000 steps
         if self.t % 10000 == 0:
-            self.saver.save(self.sess, "saved_networks/pong_game-dqn.chk", global_step=self.t)
+            self.saver.save(self.sess, "../state/saved_networks/pong_game-dqn.chk", global_step=self.t)
             print("Session saved.")
 
     def resign(self):
