@@ -12,6 +12,7 @@ from collections import deque  # queue data structure. fast appends. and pops. r
 class NeuralNetworkController(object):
     def __init__(self, paddle):
         self.paddle = paddle
+        self.learning = False
 
         # define hyper parameters
         self.ACTIONS = 3  # up, down, stay
@@ -95,6 +96,15 @@ class NeuralNetworkController(object):
     def did_paddle_move(self, event, ball):
         pass
 
+    def should_learn(self, event):
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_l:
+            self.learning = not self.learning
+
+        if self.learning:
+            self.paddle.color = (0, 128, 255)
+        else:
+            self.paddle.color = (255, 255, 255)
+
     def did_paddle_move_alone(self, ball):
         if self.arg_max_t is not None:
             if self.arg_max_t[2] == 1:
@@ -143,13 +153,16 @@ class NeuralNetworkController(object):
         :param frame:
         :param reward_t: reward tensor if score is positive
         """
+        if not self.learning:
+            return
+
         if self.inp_t is None:
             self.train_graph(frame)
 
         # output tensor
         out_t = self.output.eval(feed_dict={self.input: [self.inp_t]})[0]
         # arg_max function
-        arg_max_t = np.zeros([self.ACTIONS])
+        self.arg_max_t = np.zeros([self.ACTIONS])
 
         if random.random() <= self.epsilon or self.t <= self.OBSERVE:
             max_index = random.randrange(self.ACTIONS)
@@ -157,14 +170,14 @@ class NeuralNetworkController(object):
         else:
             max_index = np.argmax(out_t)
             r_dec = "False"
-        arg_max_t[max_index] = 1
+        self.arg_max_t[max_index] = 1
 
         # scale down epsilon
         if self.epsilon > self.FINAL_EPSILON and self.t > self.OBSERVE:
             self.epsilon -= (self.INITIAL_EPSILON - self.FINAL_EPSILON) / self.EXPLORE
 
         # reward tensor if score is positive
-        # reward_t, frame = self.pong.GetFrame(arg_max_t)
+        # reward_t, frame = self.pong.GetFrame(self.arg_max_t)
 
         # get frame pixel data
         frame = cv2.cvtColor(cv2.resize(frame, (80, 80)), cv2.COLOR_BGR2GRAY)
@@ -175,7 +188,7 @@ class NeuralNetworkController(object):
         inp_t1 = np.append(frame, self.inp_t[:, :, 0:3], axis=2)
 
         # add our input tensor, arg_max tensor, reward and updated tensor to stack of experiences
-        self.deque.append((self.inp_t, arg_max_t, reward_t, inp_t1))
+        self.deque.append((self.inp_t, self.arg_max_t, reward_t, inp_t1))
 
         # if we run out of replay memory, make room
         if len(self.deque) > self.REPLAY_MEMORY:

@@ -31,8 +31,6 @@ class Pong:
 
         self.gameOn = False
 
-        self.learning = False
-
     def save_setting(self, setting):
         self.setting = setting
         self.settingsRepository.write(self.setting)
@@ -65,6 +63,7 @@ class Pong:
 
             miss1 = self.paddle1.did_miss(self.ball)
             miss2 = self.paddle2.did_miss(self.ball)
+
             self.score.player1 += miss2
             self.score.player2 += miss1
 
@@ -78,9 +77,8 @@ class Pong:
 
             image_data = pygame.surfarray.array3d(pygame.display.get_surface())
 
-            if self.learning:
-                self.userPlayer1Controller.learn(image_data, score1 - miss1)
-                self.userPlayer2Controller.learn(image_data, score2 - miss2)
+            self.userPlayer1Controller.learn(image_data, score1 - miss1)
+            self.userPlayer2Controller.learn(image_data, score2 - miss2)
 
     def game_did_end(self, event):
         """
@@ -96,12 +94,15 @@ class Pong:
         for event in pygame.event.get():
             self.score.did_reset(event)
             self.game_did_end(event)
-            self.ball.did_restart(event)
+            self.ball.event_check(event)
+
             self.userPlayer1Controller.did_paddle_move(event, self.ball)
             self.userPlayer2Controller.did_paddle_move(event, self.ball)
+
+            self.userPlayer1Controller.should_learn(event)
+            self.userPlayer2Controller.should_learn(event)
+
             self.settingsDialog.should_display(event, self.setting)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_l:
-                self.learning = not self.learning
 
 
 pong = Pong()

@@ -12,6 +12,9 @@ class LogicalController(object):
         elif self.paddle.rect.center[1] > ball.rect.center[1]:
             self.paddle.direction = -1
 
+    def should_learn(self, event):
+        pass
+
     def learn(self, data, score):
         pass
 
