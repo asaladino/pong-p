@@ -13,8 +13,6 @@ class Pong:
     def __init__(self):
         self.settingsRepository = SettingsRepository('../state/settings.bin')
         self.setting = self.settingsRepository.read()
-        self.setting.boardHeight = 400
-        self.setting.boardWidth = 400
         self.settingsDialog = SettingsDialog(self.setting, self)
 
         pygame.init()

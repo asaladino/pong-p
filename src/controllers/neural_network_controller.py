@@ -105,6 +105,7 @@ class NeuralNetworkController(object):
         else:
             self.paddle.color = (255, 255, 255)
 
+    # noinspection PyUnusedLocal
     def did_paddle_move_alone(self, ball):
         if self.arg_max_t is not None:
             if self.arg_max_t[2] == 1:
