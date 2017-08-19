@@ -16,13 +16,3 @@ class Board(object):
         Draws the board on the screen black.
         """
         self.screen.fill((0, 0, 0))
-
-    @staticmethod
-    def game_did_end(event):
-        """
-        Check if the game quit and the app closed.
-        :param event: 
-        """
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()

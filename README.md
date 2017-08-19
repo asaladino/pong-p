@@ -23,3 +23,12 @@ For continuous play hit `c`.
 To display game settings, hit `s`.
 
 ![alt text](notes/settings.png "PongP Settings")
+
+## Commands
+
+* `c` - continuous play
+* `s` - settings
+* `space` - restart game
+* `l` - start learning if a controller is an AI
+* `⬆` - move user paddle up.
+* `⬇` - move user paddle down.

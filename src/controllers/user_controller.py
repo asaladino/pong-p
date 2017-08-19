@@ -23,5 +23,11 @@ class UserController(object):
                                     event.key == self.down and self.paddle.direction == 1:
                 self.paddle.direction = 0
 
+    def should_learn(self, event):
+        pass
+
     def learn(self, data, score):
+        pass
+
+    def resign(self):
         pass

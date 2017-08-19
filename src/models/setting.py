@@ -13,8 +13,8 @@ class ControllerTypes(Enum):
 
 class Setting:
     def __init__(self):
-        self.boardWidth = 640
-        self.boardHeight = 480
+        self.boardWidth = 80
+        self.boardHeight = 80
 
         self.controller1 = ControllerTypes.USER
         self.controller1Up = K_q
