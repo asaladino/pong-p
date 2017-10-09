@@ -19,14 +19,14 @@ class Ball:
     def initialize(self):
         self.start_position()
         self.color = (0, 128, 255)
-        self.speed = [2, 2]
+        self.speed = [1, 1]
 
     def start_position(self):
         self.rect = pygame.Rect(20, randint(20, self.board.size[1] - 20), 20, 20)
         self.speed = [0, 0]
         if self.autoPlay:
             self.color = (0, 128, 255)
-            self.speed = [2, 2]
+            self.speed = [1, 1]
 
     def paddle_missed(self):
         self.speed[0] = -self.speed[0]
