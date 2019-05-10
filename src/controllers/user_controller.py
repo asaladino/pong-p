@@ -2,7 +2,7 @@ from pygame.locals import KEYDOWN, K_DOWN, K_UP, KEYUP
 
 
 class UserController(object):
-    def __init__(self, paddle, up=K_L, down=K_DOWN):
+    def __init__(self, paddle, up=K_UP, down=K_DOWN):
         self.paddle = paddle
         self.up = up
         self.down = down

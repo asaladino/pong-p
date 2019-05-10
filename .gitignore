@@ -106,3 +106,4 @@ state/settings.bin
 # mypy
 # .mypy_cache/
 state/logs
+venv
